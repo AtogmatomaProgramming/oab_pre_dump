@@ -1,4 +1,4 @@
-# Pre-dump revision of data saved in SIRENO
+# Predump on-board data review
 
 ### v.1
 
