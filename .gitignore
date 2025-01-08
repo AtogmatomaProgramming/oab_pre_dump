@@ -1,0 +1,23 @@
+#R
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+*.Rproj
+
+#Visual Studio Code
+.vscode
+.lintr
+
+#Others
+*.xls
+*.xlsx
+errors_weights_flowchart.pdf
+
+#Not uploaded folders
+/data/*
+/data-raw/*
+/trash/*
+/tests/*
+/private/*
+/metier_target_species/*
