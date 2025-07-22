@@ -48,7 +48,7 @@ source("oab_pre_dump_add_ices_rectangle_functions.R")
 # ► YOU HAVE ONLY TO CHANGE THIS VARIABLES -------------------------------------
 
 # MONTH in numeric format
-MONTH <- 4
+MONTH <- 5
 
 # YEAR with four digits
 YEAR <- 2025
@@ -204,7 +204,7 @@ err_duplicate_lengtsh_in_grouped_species <- duplicate_lengtsh_in_grouped_species
 # For us, right now this field must be as Y.
 # TEST: why? this field is not used in this script. Delete check?
 # TODO: explain with the Ricardo's answer by email.
-err$err_sub_muestra_field <- sub_muestra_field(oab_ipd$DISCARD_LENGTHS)
+# err$err_sub_muestra_field <- sub_muestra_field(oab_ipd$DISCARD_LENGTHS)
 
 # ╚► CONFORMITY WITH MASTERS ----
 err_variable_with_masters <- lapply(oab_ipd, function(x, y) {
