@@ -48,10 +48,10 @@ source("oab_pre_dump_add_ices_rectangle_functions.R")
 # ► YOU HAVE ONLY TO CHANGE THIS VARIABLES -------------------------------------
 
 # MONTH in numeric format
-MONTH <- 10
+MONTH <- 4
 
 # YEAR with four digits
-YEAR <- 2024
+YEAR <- 2025
 
 # list with the file names
 files <- list(
@@ -92,7 +92,7 @@ BASE_FOLDER <- file.path(getwd(), "data", YEAR, paste0(YEAR, "_", MONTH_AS_CHARA
 # Path of the files to import
 PATH_IMPORT_FILES <- file.path(BASE_FOLDER, "originals")
 # Path where the final files are created
-PATH_EXPORT_FILES <- file.path(BASE_FOLDER, "to_sireno")
+PATH_EXPORT_FILES <- file.path(BASE_FOLDER, "finals")
 # Path where the error files are generated
 PATH_ERRORS_FILES <- file.path(BASE_FOLDER, "errors")
 
@@ -107,7 +107,7 @@ err <- list()
 razon <- importCsvSAPMUE("discard_cause.csv")
 grouped_species <- importCsvSAPMUE("grouped_species.csv")
 metier_target_species <- importCsvSAPMUE("metier_target_species.csv")
-                                    
+
 
 # dataset with the Type File and the name of the table of the IPD database
 # TODO: create a csv file with this information, store in data folder and
@@ -126,6 +126,8 @@ oab_ipd <- importOabIpdFiles(files, path = PATH_IMPORT_FILES)
 # Just in case
 # oab_ipd <- filter_by_trips(oab_ipd, "DESNOR24003")
 
+# LIST ID TRIPS
+unique(oab_ipd$TRIPS$acronimo)[order(unique(oab_ipd$TRIPS$acronimo))]
 
 # ► FIX FILES ------------------------------------------------------------------
 # ╚► Fix discards all measured without subsample ----
@@ -152,13 +154,16 @@ oab_ipd$CATCHES <- fix_catches_weights(oab_ipd$CATCHES)
 oab_ipd$HAULS <- fix_discarded_weights_not_measured_haul(oab_ipd$HAULS)
 
 # ╚► Fill variable metier_ieo ----
-# TODO: EXPLAIN THAT, IN CASE THERE IS NOT COMBINATION, ALLOW THE WHITE VALUE
+# TODO: THIS IS NOT LONGER USED BECAUSE THE VARIABLE IS FILLED BY THE
+# CONTRACTED COMPANY. DELETE IT.
+# TODO: MAYBE MAKE A COHERENCIE CHECK OF especie_objetivo, ESTRATO_RIM AND
+# metier_ieo?
 #' In HAULS table, the field metier_ieo is not filled by the contracted company.
 #' The value of this field depend of 'especie_objetivo' and 'ESTRATO_RIM'. A
 #' data set with this combinations is metier_target_species
 # WARNING: if there are lots of metier_ieo data as NA, maybe is need to be fixed
 # by the contracted company:
-oab_ipd$HAULS <- add_metier_ieo_variable(oab_ipd$HAULS)
+# oab_ipd$HAULS <- add_metier_ieo_variable(oab_ipd$HAULS)
 #' Example to fix problems:
 # levels(oab_ipd$HAULS$especie_objetivo) <- c(levels(oab_ipd$HAULS$especie_objetivo), "VLB")
 # oab_ipd$HAULS[oab_ipd$HAULS$ESTRATO_RIM == "BACA_CN" & oab_ipd$HAULS$especie_objetivo == "GAR", "especie_objetivo"] <- "VBL"
@@ -198,7 +203,8 @@ err_duplicate_lengtsh_in_grouped_species <- duplicate_lengtsh_in_grouped_species
 # ╚► FIELD sub_muestra MUST BE Y ----
 # For us, right now this field must be as Y.
 # TEST: why? this field is not used in this script. Delete check?
-# err$err_sub_muestra_field <- sub_muestra_field(oab_ipd$DISCARD_LENGTHS)
+# TODO: explain with the Ricardo's answer by email.
+err$err_sub_muestra_field <- sub_muestra_field(oab_ipd$DISCARD_LENGTHS)
 
 # ╚► CONFORMITY WITH MASTERS ----
 err_variable_with_masters <- lapply(oab_ipd, function(x, y) {
@@ -303,8 +309,12 @@ files_to_backup <- c(
   "oab_pre_dump_export_functions.R"
 )
 
+# TODO: create a function to automate this process
 files_to_backup_from <- file.path(getwd(), files_to_backup)
 files_to_backup_to <- file.path(PATH_BACKUP_FILES, files_to_backup)
 
+# Create backup subfolder in case it doesn't exists:
+if (!file.exists(file.path(PATH_BACKUP_FILES))) {
+  dir.create(file.path(PATH_BACKUP_FILES))
+}
 file.copy(files_to_backup_from, files_to_backup_to, overwrite = TRUE)
-
