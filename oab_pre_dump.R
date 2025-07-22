@@ -178,6 +178,8 @@ oab_ipd$HAULS <- fix_discarded_weights_not_measured_haul(oab_ipd$HAULS)
 # An errors file is exported to share with the Area Coordinators in order to
 # check it.
 oab_ipd$DISCARD_LENGTHS <- error_lengths_discards(oab_ipd$DISCARD_LENGTHS)
+#### SEND THE FILE species_to_check_ TO COORDINATORS!!!!!
+
 
 # ╚► Add ICES statistical rectangle hauls. ----
 # The IPD file contains a empty variable called "cuadrícula" which is filled
@@ -204,7 +206,7 @@ err_duplicate_lengtsh_in_grouped_species <- duplicate_lengtsh_in_grouped_species
 # For us, right now this field must be as Y.
 # TEST: why? this field is not used in this script. Delete check?
 # TODO: explain with the Ricardo's answer by email.
-err$err_sub_muestra_field <- sub_muestra_field(oab_ipd$DISCARD_LENGTHS)
+# err$err_sub_muestra_field <- sub_muestra_field(oab_ipd$DISCARD_LENGTHS)
 
 # ╚► CONFORMITY WITH MASTERS ----
 err_variable_with_masters <- lapply(oab_ipd, function(x, y) {
@@ -263,7 +265,7 @@ err$error_weights_catches <- error_weights_catches(oab_ipd$CATCHES)
 # species has been measured. In this cases, the fields 'peso_descarte' and
 # peso_muestra_descarte' must be 0. An exception is when there is a subsample,
 # in this cases only 'peso_muestra_descarte' must be 0.
-err$err_weights_discards <- error_weights_discards(oab_ipd$CATCHES, oab_ipd$DISCARD_LENGTHS)
+# err$err_weights_discards <- error_weights_discards(oab_ipd$CATCHES, oab_ipd$DISCARD_LENGTHS)
 # WARNING: There are a lot of errors of "The discard is not subsampled and is
 # not all measured, but the peso_sub_muestra variable is equal to 0". In this
 # cases, I assume that there are a mistake in the field "todo_medido_descarte"
