@@ -48,7 +48,7 @@ source("oab_pre_dump_add_ices_rectangle_functions.R")
 # ► YOU HAVE ONLY TO CHANGE THIS VARIABLES -------------------------------------
 
 # MONTH in numeric format
-MONTH <- 4
+MONTH <- 5
 
 # YEAR with four digits
 YEAR <- 2025
