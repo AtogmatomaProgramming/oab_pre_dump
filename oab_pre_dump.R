@@ -48,7 +48,7 @@ source("oab_pre_dump_add_ices_rectangle_functions.R")
 # ► YOU HAVE ONLY TO CHANGE THIS VARIABLES -------------------------------------
 
 # MONTH in numeric format
-MONTH <- 5
+MONTH <- 9
 
 # YEAR with four digits
 YEAR <- 2025
@@ -88,16 +88,93 @@ DATA_FOLDER <- file.path(getwd(), "data")
 FOLDER_SUFFIX <- ifelse(is.null(FOLDER_SUFFIX) | is.na(FOLDER_SUFFIX) | FOLDER_SUFFIX == "", "", paste0("_", FOLDER_SUFFIX))
 BASE_FOLDER <- file.path(getwd(), "data", YEAR, paste0(YEAR, "_", MONTH_AS_CHARACTER, FOLDER_SUFFIX))
 
+# Create work folders
+
+folder_names <- list(originals = c("originals"),
+                     finals = c("finals"),
+                     errors = c("errors"), 
+                     backup = c("backup"))
+
+folders_path <- lapply(folder_names,
+                       function(x, base_path){
+                         
+                         folder_path <- file.path(base_path, x)
+                         
+                         if(dir.exists(folder_path)){
+                           message(paste0("Directory '", x, "' already exists."))
+                         } else {
+                           dir.create(folder_path)
+                           message(paste0("Directory '", x, "' has been correctly created."))
+                         }
+                         
+                         return(folder_path)
+                         
+                       },
+                       
+                       base_path = BASE_FOLDER)
+
+
+# Obtain files present in base folder
+
+single_file_names <- list.files(BASE_FOLDER)
+
+files <- list.files(BASE_FOLDER, full.names = TRUE)
+
+info_files <- file.info(files)
+
+files <- files[!info_files$isdir]
+
+info_files <- NULL
+
+#' Check if the files have the usual name 
+#' and move them to "originals" directory 
+
+correct_pattern = paste(c("lectura_ICES", 
+                          "TXT"), 
+                        collapse = "|")
+
+match_pattern <- all(grepl(correct_pattern, files))
+
+
+if(match_pattern){
+  
+  message("CORRECT: The name of the files have the usual format.")
+  
+  single_file_names <- single_file_names[grepl(correct_pattern, single_file_names)]
+  
+  sapply(single_file_names, function(x){
+    
+    file.rename(paste0(BASE_FOLDER, 
+                       "/", 
+                       x), 
+                paste0(BASE_FOLDER, 
+                       "/", 
+                       folder_names[["originals"]], 
+                       "/", 
+                       x))
+    
+    message(paste0("File '", x, "' moved to '", folder_names[["originals"]], "' correctly."))
+    
+  })
+  
+  } else {
+    
+    message("WARNING: the files are not the usual. Check again before continue")
+    
+  }
+  
+
+
 
 # Path of the files to import
-PATH_IMPORT_FILES <- file.path(BASE_FOLDER, "originals")
+PATH_IMPORT_FILES <- folders_path[["originals"]]
 # Path where the final files are created
-PATH_EXPORT_FILES <- file.path(BASE_FOLDER, "finals")
+PATH_EXPORT_FILES <- folders_path[["finals"]]
 # Path where the error files are generated
-PATH_ERRORS_FILES <- file.path(BASE_FOLDER, "errors")
+PATH_ERRORS_FILES <- folders_path[["errors"]]
 
 # Path where the backup files are stored
-PATH_BACKUP_FILES <- file.path(BASE_FOLDER, "backup")
+PATH_BACKUP_FILES <- folders_path[["backup"]]
 
 # list with all errors found in data frames:
 err <- list()
