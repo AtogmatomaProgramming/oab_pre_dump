@@ -185,6 +185,7 @@ NAME_FILE_VS_TYPE_FILE <- createNameVsTypeDataset()
 oab_ipd <- importOabIpdFiles(files, path = PATH_IMPORT_FILES)
 # list2env(oab_ipd, .GlobalEnv)
 
+
 # FILTER BY MONTH --------------------------------------------------------------
 # Only use when IPD send us various months in the same files
 # oab_ipd <- filter_by_month(oab_ipd, MONTH_AS_CHARACTER)
@@ -194,7 +195,7 @@ oab_ipd <- importOabIpdFiles(files, path = PATH_IMPORT_FILES)
 # oab_ipd <- filter_by_trips(oab_ipd, "DESNOR24003")
 
 # LIST ID TRIPS
-unique(oab_ipd$TRIPS$acronimo)[order(unique(oab_ipd$TRIPS$acronimo))]
+id_trips <- unique(oab_ipd$TRIPS$acronimo)[order(unique(oab_ipd$TRIPS$acronimo))]
 
 # ► FIX FILES ------------------------------------------------------------------
 # ╚► Fix discards all measured without subsample ----
