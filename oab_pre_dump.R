@@ -38,20 +38,46 @@ library(gdata) # to use with write.fwf(), in OAB_IPD_to_SIRENO_export_functions.
 library(sapmuebase)
 library(sf)
 
+# ---- install archive package
+# install.packages("archive")
+library(archive)
+
 # ► FUNCTIONS ------------------------------------------------------------------
-# All the functions required in this script are located in those files.
-source("oab_pre_dump_general_functions.R")
-source("oab_pre_dump_fix_data_functions.R")
-source("oab_pre_dump_export_functions.R")
-source("oab_pre_dump_add_ices_rectangle_functions.R")
+# Get the complete path for all function's files 
+function_files <- list.files(file.path(getwd(), 
+                                       "R"), 
+                             full.names = TRUE, 
+                             recursive = TRUE)
+
+# Import all functions 
+
+sapply(function_files,
+       function(x){
+         tryCatch({
+           
+           source(x)
+           
+         }, error = function(e){
+           
+           cat("An error occurred:", conditionMessage(e), "\n")
+           
+         }, warning = function(w){
+           
+           cat("A warning occurred:", conditionMessage(w), "\n")
+           
+         }
+         )
+       })
+
 
 # ► YOU HAVE ONLY TO CHANGE THIS VARIABLES -------------------------------------
 
 # MONTH in numeric format
-MONTH <- 5
+MONTH <- 9
 
 # YEAR with four digits
 YEAR <- 2025
+
 
 # list with the file names
 files <- list(
@@ -76,6 +102,17 @@ files <- list(
 # month as character
 MONTH_AS_CHARACTER <- sprintf("%02d", MONTH)
 
+# list with the ".rar" extension file name
+
+rar_names <- list(lectura = paste0("lectura_ICES_",
+                                   MONTH_AS_CHARACTER,
+                                   "_",
+                                   YEAR,
+                                   ".rar"),
+                  txt = paste0("txt_ICES_",
+                               MONTH_AS_CHARACTER,
+                               ".rar"))
+
 # Suffix to path folder (useful when the data of the same month is received
 # in different files). If it is not necessary, use NULL, NA or "".
 # FOLDER_SUFFIX <- "b"
@@ -88,16 +125,46 @@ DATA_FOLDER <- file.path(getwd(), "data")
 FOLDER_SUFFIX <- ifelse(is.null(FOLDER_SUFFIX) | is.na(FOLDER_SUFFIX) | FOLDER_SUFFIX == "", "", paste0("_", FOLDER_SUFFIX))
 BASE_FOLDER <- file.path(getwd(), "data", YEAR, paste0(YEAR, "_", MONTH_AS_CHARACTER, FOLDER_SUFFIX))
 
+# Path where rar files are stored by default 
+
+STORE_DEFAULT_FOLDER <- "C:/Users/alberto.candelario/Downloads"
+
+# Create work folders
+
+folder_names <- list(originals = c("originals"),
+                     finals = c("finals"),
+                     errors = c("errors"), 
+                     backup = c("backup"))
+
+folders_path <- lapply(folder_names, 
+                       manage_work_folder,
+                       BASE_FOLDER)
+
 
 # Path of the files to import
-PATH_IMPORT_FILES <- file.path(BASE_FOLDER, "originals")
+PATH_IMPORT_FILES <- folders_path[["originals"]]
 # Path where the final files are created
-PATH_EXPORT_FILES <- file.path(BASE_FOLDER, "finals")
+PATH_EXPORT_FILES <- folders_path[["finals"]]
 # Path where the error files are generated
-PATH_ERRORS_FILES <- file.path(BASE_FOLDER, "errors")
+PATH_ERRORS_FILES <- folders_path[["errors"]]
 
 # Path where the backup files are stored
-PATH_BACKUP_FILES <- file.path(BASE_FOLDER, "backup")
+PATH_BACKUP_FILES <- folders_path[["backup"]]
+
+# Move work files to originals' folder
+
+lapply(rar_names,
+       move_file,
+       STORE_DEFAULT_FOLDER,
+       PATH_IMPORT_FILES)
+
+# Extrat the files inside the compressed file
+
+COMPRESSED_FILE_PATH <- file.path(PATH_IMPORT_FILES, 
+                                  rar_names[["txt"]])
+
+archive_extract(COMPRESSED_FILE_PATH,
+                PATH_IMPORT_FILES)
 
 # list with all errors found in data frames:
 err <- list()
@@ -118,6 +185,7 @@ NAME_FILE_VS_TYPE_FILE <- createNameVsTypeDataset()
 oab_ipd <- importOabIpdFiles(files, path = PATH_IMPORT_FILES)
 # list2env(oab_ipd, .GlobalEnv)
 
+
 # FILTER BY MONTH --------------------------------------------------------------
 # Only use when IPD send us various months in the same files
 # oab_ipd <- filter_by_month(oab_ipd, MONTH_AS_CHARACTER)
@@ -127,7 +195,7 @@ oab_ipd <- importOabIpdFiles(files, path = PATH_IMPORT_FILES)
 # oab_ipd <- filter_by_trips(oab_ipd, "DESNOR24003")
 
 # LIST ID TRIPS
-unique(oab_ipd$TRIPS$acronimo)[order(unique(oab_ipd$TRIPS$acronimo))]
+id_trips <- unique(oab_ipd$TRIPS$acronimo)[order(unique(oab_ipd$TRIPS$acronimo))]
 
 # ► FIX FILES ------------------------------------------------------------------
 # ╚► Fix discards all measured without subsample ----
