@@ -73,7 +73,7 @@ sapply(function_files,
 # ► YOU HAVE ONLY TO CHANGE THIS VARIABLES -------------------------------------
 
 # MONTH in numeric format
-MONTH <- 9
+MONTH <- 10
 
 # YEAR with four digits
 YEAR <- 2025
@@ -116,7 +116,7 @@ rar_names <- list(lectura = paste0("lectura_ICES_",
 # Suffix to path folder (useful when the data of the same month is received
 # in different files). If it is not necessary, use NULL, NA or "".
 # FOLDER_SUFFIX <- "b"
-FOLDER_SUFFIX <- ""
+FOLDER_SUFFIX <- "TEST"
 
 # Path to the data folder
 DATA_FOLDER <- file.path(getwd(), "data")
@@ -128,6 +128,16 @@ BASE_FOLDER <- file.path(getwd(), "data", YEAR, paste0(YEAR, "_", MONTH_AS_CHARA
 # Path where rar files are stored by default 
 
 STORE_DEFAULT_FOLDER <- "C:/Users/alberto.candelario/Downloads"
+
+# Path where a copy of all files used and created will be stored in a share folder
+
+PATH_SHARE_FOLDER <- "C:/Users/alberto.candelario.ST/Documents/local_nextCloud/SAP_OAB/OAB_data_review/pre_dump_data"
+
+# PATH_SHARE_FOLDER <- "C:/Users/alberto.candelario/Documents/personal_nextCloud/SAP_OAB/OAB_data_review/pre_dump_data"
+
+PATH_STORE_SHARED_FILES <- file.path(PATH_SHARE_FOLDER, 
+                                    YEAR, 
+                                    paste0(YEAR, "_", MONTH_AS_CHARACTER, FOLDER_SUFFIX))
 
 # Create work folders
 
@@ -388,3 +398,7 @@ if (!file.exists(file.path(PATH_BACKUP_FILES))) {
   dir.create(file.path(PATH_BACKUP_FILES))
 }
 file.copy(files_to_backup_from, files_to_backup_to, overwrite = TRUE)
+
+# ► COPY FILES AND FOLDERS INTO THE SHARE FOLDER -------------------------------
+
+copy_files_to_folder(BASE_FOLDER, PATH_STORE_SHARED_FILES)
