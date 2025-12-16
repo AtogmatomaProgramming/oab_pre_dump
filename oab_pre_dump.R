@@ -131,9 +131,9 @@ STORE_DEFAULT_FOLDER <- "C:/Users/alberto.candelario/Downloads"
 
 # Path where a copy of all files used and created will be stored in a share folder
 
-PATH_SHARE_FOLDER <- "C:/Users/alberto.candelario.ST/Documents/local_nextCloud/SAP_OAB/OAB_data_review/pre_dump_data"
+# PATH_SHARE_FOLDER <- "C:/Users/alberto.candelario.ST/Documents/local_nextCloud/SAP_OAB/OAB_data_review/pre_dump_data"
 
-# PATH_SHARE_FOLDER <- "C:/Users/alberto.candelario/Documents/personal_nextCloud/SAP_OAB/OAB_data_review/pre_dump_data"
+PATH_SHARE_FOLDER <- "C:/Users/alberto.candelario/Documents/personal_nextCloud/SAP_OAB/OAB_data_review/pre_dump_data"
 
 PATH_STORE_SHARED_FILES <- file.path(PATH_SHARE_FOLDER, 
                                     YEAR, 
