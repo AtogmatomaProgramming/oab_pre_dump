@@ -59,8 +59,6 @@ copy_files <- function (folder_from, folder_to){
 
       }
 
-
-      
       # Fourth, copy files from source to destination
       file.copy(from = file.path(folder_from, files_from),
                 to = file.path(folder_to, files_from),
