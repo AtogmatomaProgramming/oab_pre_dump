@@ -43,6 +43,23 @@ copy_files <- function (folder_from, folder_to){
         }
 
       }
+
+      #' Fourth, create subdirectories in the destination folder,
+      #' if they do not exist already
+      
+      if(length(files_to) == 0){
+
+      folders <- list.dirs(folder_from, 
+                          recursive = TRUE, 
+                          full.names = FALSE)
+      
+      lapply(file.path(folder_to, folders), 
+             dir.create,
+             recursive = TRUE)
+
+      }
+
+
       
       # Fourth, copy files from source to destination
       file.copy(from = file.path(folder_from, files_from),
@@ -61,6 +78,7 @@ copy_files <- function (folder_from, folder_to){
 
     }
   )
+
 
 }
 
