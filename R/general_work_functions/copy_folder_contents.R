@@ -1,4 +1,4 @@
-#' Copy folder and contents
+#' Copy folder and its contents
 #'
 #' @description
 #' Function that makes a copy of all the files and subdirectories from a source folder to a destination folder.
@@ -9,22 +9,22 @@
 #'
 #' @return NULL. The function is called for its side effects of copying files.
 
-copy_files <- function (folder_from, folder_to){
+copy_folder_contents <- function (folder_from, folder_to){
 
   tryCatch(
-    expr = {
+     expr = {
       
-      # First, take a list with of the files present in the source and destination folders
+      # Take a list with of the files present in the source and destination folders
       files_from <- list.files(folder_from, 
                                recursive = TRUE)
       files_to <- list.files(folder_to, 
                              recursive = TRUE)
       
       
-      # Second, create the overwrite variable with FALSE as default value
+      # Create the overwrite variable with FALSE as default value
       overwrite <- FALSE
       
-      # Third, check if there are files in the destination folder
+      # Check if there are files in the destination folder
       if(any(files_from %in% files_to)){
 
         message("WARNING: There are existing files in the destination folder.")
@@ -44,10 +44,8 @@ copy_files <- function (folder_from, folder_to){
 
       }
 
-      #' Fourth, create subdirectories in the destination folder,
+      #' Create subdirectories in the destination folder,
       #' if they do not exist already
-      
-      if(length(files_to) == 0){
 
       folders <- list.dirs(folder_from, 
                           recursive = TRUE, 
@@ -57,9 +55,7 @@ copy_files <- function (folder_from, folder_to){
              dir.create,
              recursive = TRUE)
 
-      }
-
-      # Fourth, copy files from source to destination
+      # Copy files from source to destination
       file.copy(from = file.path(folder_from, files_from),
                 to = file.path(folder_to, files_from),
                 overwrite = overwrite)
@@ -70,13 +66,8 @@ copy_files <- function (folder_from, folder_to){
 
       stop("An error occurred while copying files: ", e$message)
 
-    }, warning = function(w){
-
-      message("Warning: ", w$message)
-
     }
   )
-
 
 }
 
