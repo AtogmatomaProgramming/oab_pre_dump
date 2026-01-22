@@ -400,5 +400,5 @@ if (!file.exists(file.path(PATH_BACKUP_FILES))) {
 file.copy(files_to_backup_from, files_to_backup_to, overwrite = TRUE)
 
 # ► COPY FILES AND FOLDERS INTO THE SHARE FOLDER -------------------------------
-copy_files_to_folder(BASE_FOLDER, PATH_STORE_SHARED_FILES)
 
+copy_folder_contents(BASE_FOLDER, PATH_STORE_SHARED_FILES)
