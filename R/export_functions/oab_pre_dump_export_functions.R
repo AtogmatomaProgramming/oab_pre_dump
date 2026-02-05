@@ -29,7 +29,6 @@ exportToTxtSireno <- function (df, typeFile, path = getwd()){
   # Get the width of the fields
   widths_export <- as.character(getOabTableStruct(typeFile)[["length_field_export"]])
   
-  
   # Fix decimal separation
   df <- decimalWithComma(df)
   

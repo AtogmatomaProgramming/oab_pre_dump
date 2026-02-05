@@ -66,6 +66,7 @@ getOabTableStruct <- function(typeFile){
   
   # import format file dataset
   path_dataset <- paste(getwd(), 'format_variables_oab.csv', sep="/") 
+  
   formato_variables_oab_ipd <- importCsvSAPMUE(path_dataset)
   
   
@@ -92,25 +93,35 @@ getOabTableStruct <- function(typeFile){
 #'  @path path of the files. Working folder by default.
 importOabIpd <- function(filename, typeFile, path=getwd()){
 
-  full_path <- paste(path, filename, sep = "/")
+  tryCatch({
+    full_path <- paste(path, filename, sep = "/")
   
-  table_struct <- getOabTableStruct(typeFile)
+    table_struct <- getOabTableStruct(typeFile)
+    
+    width_vector <- table_struct[["length_field_import"]]
+    classes_vector <- as.character(table_struct[["class_variable_final"]])
+    colnames_vector <- as.character(table_struct[["name_variable"]])
   
-  width_vector <- table_struct[["length_field_import"]]
-  classes_vector <- as.character(table_struct[["class_variable_final"]])
-  colnames_vector <- as.character(table_struct[["name_variable"]])
-  
-  records <- read.fwf(file = full_path,
-                      widths = width_vector,
-                      strip.white = TRUE,
-                      dec = ",",
-                      colClasses = classes_vector,
-                      fileEncoding = "UTF-8"
-                      )
-  
-  colnames(records) <- colnames_vector
-  
-  return(records)
+    records <- read.fwf(file = full_path,
+                        widths = width_vector,
+                        strip.white = TRUE,
+                        dec = ",",
+                        colClasses = classes_vector,
+                        fileEncoding = "UTF-8"
+                        )
+    
+    colnames(records) <- colnames_vector
+    
+    return(records)
+
+  }, error = function(e){
+    error_description <- paste0("Error importing OAB IPD file: ", filename,
+                                " of type: ", typeFile, ".\n",
+                                "Please, check that the file exists in the path: ",
+                                path, " and that the file has the correct format.\n",
+                                "Detailed error message: ", e)
+    stop(error_description)
+  })
   
 }
 

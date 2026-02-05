@@ -73,7 +73,7 @@ sapply(function_files,
 # ► YOU HAVE ONLY TO CHANGE THIS VARIABLES -------------------------------------
 
 # MONTH in numeric format
-MONTH <- 11
+MONTH <- 12
 
 # YEAR with four digits
 YEAR <- 2025
@@ -173,8 +173,8 @@ lapply(rar_names,
 COMPRESSED_FILE_PATH <- file.path(PATH_IMPORT_FILES, 
                                   rar_names[["txt"]])
 
-archive_extract(COMPRESSED_FILE_PATH,
-                PATH_IMPORT_FILES)
+# archive_extract(COMPRESSED_FILE_PATH,
+#                 PATH_IMPORT_FILES)
 
 # list with all errors found in data frames:
 err <- list()

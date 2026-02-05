@@ -2,11 +2,14 @@
 acronimo;acronimo;texto;factor;21;21;2;1;1;1;1;1;1;1;1;1
 lance;lance;texto;factor;4;4;;2;2;2;2;2;2;2;2;2
 especie;COD_ESP;texto;factor;5;5;;;5;3;3;9;;3;3;
-categoria;categoria;texto;factor;3;3;;;6;4;4;4;;;7;
+categoria;categoria;texto;factor;3;3;;;6;4;4;4;;;;
+categoria;categoria;texto;factor;4;4;;;;;;;;;7;
 sexo;sexo;texto;factor;1;1;;;;8;5;12;;;8;
 peso_muestra_total;peso_muestra_total;doble;numeric;22;22;;;;;6;;;;;
-peso_sub_muestra;peso_sub_muestra;doble;numeric;22;22;;;;;7;;;;4;
-numero_ejemplares_totales;numero_ejemplares_totales;entero;integer;5;11;;;;;8;;;;5;
+peso_sub_muestra;peso_sub_muestra;doble;numeric;22;22;;;;;7;;;;;
+peso_sub_muestra;peso_sub_muestra;doble;numeric;11;22;;;;;;;;;4;
+numero_ejemplares_totales;numero_ejemplares_totales;entero;integer;5;11;;;;;8;;;;;
+numero_ejemplares_totales;numero_ejemplares_totales;doble;numeric;5;11;;;;;;;;;5;
 talla;talla;doble;numeric;10;22;;;;6;9;13;;;9;
 numero_ejemplares;numero_ejemplares;entero;integer;5;6;;;;;10;14;;;;
 descarte;COD_RAZON;texto;factor;4;4;;;;;11;;;;;
@@ -151,7 +154,6 @@ rumbo;rumbo;entero;integer;3;11;;10;;;;;;;;
 separacion_brazoletas_palangre;separacion_brazoletas_palangre;texto;character;30;30;;;;;;;26;;;
 separacion_rejilla_arrastre;separacion_rejilla_arrastre;entero;integer;3;6;;;;;;;7;;;
 sobre_copo_arrastre;sobre_copo_arrastre;texto;character;1;1;;;;;;;18;;;
-talla;talla;doble;numeric;5;;;;;;;;;;;
 tamanio_anzuelos_palangre;tamanio_anzuelos_palangre;entero;integer;2;6;;;;;;;23;;;
 tamanio_red_cerco;tamanio_red_cerco;entero;integer;3;6;;;;;;;34;;;
 temperatura;temperatura;entero;integer;4;11;;28;;;;;;;;
